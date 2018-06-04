@@ -1,0 +1,29 @@
+checkout:
+  process:
+    steps:
+      ADDRESS:
+        - sampleBeanA
+        - sampleBeanB
+        - sampleBeanC
+        - sampleBeanD
+      SELECT_ADDRESS:
+        - sampleBeanD
+        - sampleBeanB
+        - sampleBeanA
+        - sampleBeanC
+        - sampleBeanA
+        - sampleBeanB
+        - sampleBeanB
+      SHIPPING:
+        - sampleBeanD
+        - sampleBeanC
+      SELECT_PAYMENT:
+        - sampleBeanA
+        - sampleBeanC
+        - sampleBeanD
+      PAYMENT_METHOD:
+        - sampleBeanB
+        - sampleBeanA
+        - sampleBeanA
+        - sampleBeanA
+        - sampleBeanB
