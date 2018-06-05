@@ -18,10 +18,12 @@ public class FlowController {
     @PostMapping("api/flow/{stepToExecute}")
     public ResponseEntity<ExecutionContext> executeFlow(@PathVariable String stepToExecute) {
 
+        Step step = Step.valueOf(stepToExecute.toUpperCase());
+
         final ExecutionContext executionContext = ExecutionContext.builder()
                 .build();
 
-        final ExecutionContext processedExecutionContext = processHandler.executeProcessChainForStep(Step.valueOf(stepToExecute.toUpperCase()), executionContext);
+        final ExecutionContext processedExecutionContext = processHandler.executeProcessChainForStep(step, executionContext);
 
         return ResponseEntity.ok(processedExecutionContext);
     }
