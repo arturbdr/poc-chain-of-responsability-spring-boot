@@ -1,6 +1,5 @@
 package com.poc.chainofresponsability.usecase.impl;
 
-import com.poc.chainofresponsability.config.ProcessConfiguration;
 import com.poc.chainofresponsability.domain.ExecutionContext;
 import com.poc.chainofresponsability.domain.Step;
 import com.poc.chainofresponsability.usecase.ServiceChain;

@@ -1,4 +1,4 @@
-package com.poc.chainofresponsability.config;
+package com.poc.chainofresponsability.usecase.impl;
 
 import com.poc.chainofresponsability.domain.Step;
 import com.poc.chainofresponsability.domain.exception.NoStepsDefinedException;
