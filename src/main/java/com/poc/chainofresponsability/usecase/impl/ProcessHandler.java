@@ -2,7 +2,7 @@ package com.poc.chainofresponsability.usecase.impl;
 
 import com.poc.chainofresponsability.domain.ExecutionContext;
 import com.poc.chainofresponsability.domain.Step;
-import com.poc.chainofresponsability.usecase.ServiceChain;
+import com.poc.chainofresponsability.usecase.ExecutionChain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ public class ProcessHandler {
         notNull(step, "the Step must be defined");
         notNull(executionContext, "the execution context cant be null");
 
-        final List<ServiceChain> beansToExecute = processConfiguration
+        final List<ExecutionChain> beansToExecute = processConfiguration
                 .getStepsBean()
                 .get(step);
 

@@ -2,7 +2,7 @@ package com.poc.chainofresponsability.usecase;
 
 import com.poc.chainofresponsability.domain.ExecutionContext;
 
-public interface ServiceChain {
+public interface ExecutionChain {
 
     void executeProcess(ExecutionContext executionContext);
 }

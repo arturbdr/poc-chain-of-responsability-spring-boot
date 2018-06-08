@@ -1,8 +1,8 @@
 package com.poc.chainofresponsability.usecase.impl
 
 import com.poc.chainofresponsability.domain.Step
-import com.poc.chainofresponsability.domain.exception.NoStepsDefinedException
-import com.poc.chainofresponsability.usecase.ServiceChain
+import com.poc.chainofresponsability.domain.exception.NoStepDefinedException
+import com.poc.chainofresponsability.usecase.ExecutionChain
 import org.springframework.beans.factory.BeanFactory
 import spock.lang.Specification
 
@@ -32,7 +32,7 @@ class ProcessConfigurationTest extends Specification {
         processConfiguration.setSteps(steps)
 
         when: "the application starts, it should call PostConstruct"
-        beanFactory.getBean("sampleBeanA", ServiceChain.class) >> sampleBeanA
+        beanFactory.getBean("sampleBeanA", ExecutionChain.class) >> sampleBeanA
         processConfiguration.setupStepsChain()
 
         then: "It should load the Map with SampleBeanA (the only configured for this steps)"
@@ -47,9 +47,9 @@ class ProcessConfigurationTest extends Specification {
         processConfiguration.setSteps(steps)
 
         when: "the application starts, it should call PostConstruct"
-        beanFactory.getBean("sampleBeanA", ServiceChain.class) >> sampleBeanA
-        beanFactory.getBean("sampleBeanB", ServiceChain.class) >> sampleBeanB
-        beanFactory.getBean("sampleBeanC", ServiceChain.class) >> sampleBeanC
+        beanFactory.getBean("sampleBeanA", ExecutionChain.class) >> sampleBeanA
+        beanFactory.getBean("sampleBeanB", ExecutionChain.class) >> sampleBeanB
+        beanFactory.getBean("sampleBeanC", ExecutionChain.class) >> sampleBeanC
         processConfiguration.setupStepsChain()
 
         then: "It should load the Map with the SELECT_ADDRESS and 3 beans in the order B --> A --> C"
@@ -68,14 +68,14 @@ class ProcessConfigurationTest extends Specification {
         processConfiguration.setSteps(steps)
 
         when: "the application starts, it should call PostConstruct"
-        beanFactory.getBean("sampleBeanA", ServiceChain.class) >> sampleBeanA
-        beanFactory.getBean("sampleBeanB", ServiceChain.class) >> sampleBeanB
-        beanFactory.getBean("sampleBeanC", ServiceChain.class) >> sampleBeanC
-        beanFactory.getBean("sampleBeanD", ServiceChain.class) >> sampleBeanD
+        beanFactory.getBean("sampleBeanA", ExecutionChain.class) >> sampleBeanA
+        beanFactory.getBean("sampleBeanB", ExecutionChain.class) >> sampleBeanB
+        beanFactory.getBean("sampleBeanC", ExecutionChain.class) >> sampleBeanC
+        beanFactory.getBean("sampleBeanD", ExecutionChain.class) >> sampleBeanD
         processConfiguration.setupStepsChain()
 
         then: "It should load the Map with the SELECT_PAYMENT and  PAYMENT_METHOD and steps configured in order"
-        processConfiguration.getStepsBean().size() == 2 // SELECT_ADDRESS and PAYMENT_METHOD
+        processConfiguration.getStepsBean().size() == 2 // SELECT_PAYMENT and PAYMENT_METHOD
         processConfiguration.getStepsBean().get(SELECT_PAYMENT).size() == 3
         processConfiguration.getStepsBean().get(SELECT_PAYMENT) == [sampleBeanA, sampleBeanC, sampleBeanD]
 
@@ -90,9 +90,35 @@ class ProcessConfigurationTest extends Specification {
         processConfiguration.setupStepsChain()
 
         then: "It should return exception"
-        def exception = thrown(NoStepsDefinedException)
+        def exception = thrown(NoStepDefinedException)
         exception.message == "There are no Processes defined. Its required to define it in a yml file"
 
+    }
+
+    def "It should return exception due to no null steps for a process"() {
+        given: "No steps for process defined"
+        steps.put(SELECT_PAYMENT, null)
+        processConfiguration.setSteps(steps)
+
+        when: "the application starts, it should call PostConstruct"
+        processConfiguration.setupStepsChain()
+
+        then: "It should return exception"
+        def exception = thrown(IllegalArgumentException)
+        exception.message == "There are no steps defined for SELECT_PAYMENT"
+    }
+
+    def "It should return exception due to no steps configured for a process "() {
+        given: "No steps for process defined"
+        steps.put(SELECT_PAYMENT, Collections.emptyList())
+        processConfiguration.setSteps(steps)
+
+        when: "the application starts, it should call PostConstruct"
+        processConfiguration.setupStepsChain()
+
+        then: "It should return exception"
+        def exception = thrown(IllegalArgumentException)
+        exception.message == "Empty steps defined for SELECT_PAYMENT"
     }
 
 }

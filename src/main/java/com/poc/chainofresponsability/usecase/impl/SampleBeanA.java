@@ -2,7 +2,7 @@ package com.poc.chainofresponsability.usecase.impl;
 
 import com.poc.chainofresponsability.domain.Error;
 import com.poc.chainofresponsability.domain.ExecutionContext;
-import com.poc.chainofresponsability.usecase.ServiceChain;
+import com.poc.chainofresponsability.usecase.ExecutionChain;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import static org.springframework.util.Assert.notNull;
 
 @Service
 @Slf4j
-public class SampleBeanA implements ServiceChain {
+public class SampleBeanA implements ExecutionChain {
 
     @Override
     public void executeProcess(final ExecutionContext executionContext) {
