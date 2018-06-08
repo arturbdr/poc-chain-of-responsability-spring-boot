@@ -38,7 +38,7 @@ public class ProcessConfiguration {
             throw new NoStepDefinedException("There are no Processes defined. Its required to define it in a yml file");
         }
 
-        log.info("loading steps defined in yml steps = {}", steps);
+        log.info("loading steps defined in yml. steps = {}", steps);
         stepsBean = new ConcurrentHashMap<>(steps.size());
         steps.forEach((processName, stepInProcess) -> {
             notNull(stepInProcess, "There are no steps defined for " + processName);
